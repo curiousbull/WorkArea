@@ -1,0 +1,131 @@
+
+* Numpy：操作与处理数据
+
+** 什么是 Numpy 和 Numpy 数组
+
+*** Numpy数组
+
+*** Numpy参考文档
+
+    + 在线版： [[http://docs.scipy.org]]
+    + 交互式：
+      #+BEGIN_SRC python
+        np.array?
+      #+END_SRC
+    + 查询某种结构或功能
+      #+BEGIN_SRC python
+        np.lookfor('create array')
+      #+END_SRC
+
+      #+BEGIN_SRC python
+        np.con?
+      #+END_SRC
+
+*** 导入Numpy的建议
+    #+BEGIN_SRC python
+      import numpy as np
+    #+END_SRC
+
+** 创建 Numpy 数组
+
+*** 手动创建数组
+
+    + 一维数组：
+      #+BEGIN_SRC python
+        import numpy as np
+        a = np.array([0,1,2,3])
+        a.ndim
+        a.shape
+        len(a)
+      #+END_SRC
+
+    + 二维及多维数组
+      #+BEGIN_SRC python
+        import numpy as np
+        b = np.array([[0,1,2], [3,4,5]])
+        c = np.array([[[1], [2]], [[3], [4]]])
+      #+END_SRC
+
+
+
+*** 用函数创建数组
+
+    + 等间距分布的数组
+      #+BEGIN_SRC python
+        a = np.arange(10) # 0 .. n-1
+      #+END_SRC
+
+    + 指定数量的数组
+      #+BEGIN_SRC python
+        c = np.linspace(0, 1, 6) # start, end, num-points
+        c = np.linspace(0, 1, 5, endpoint = False)
+      #+END_SRC
+
+    + 一些常用的数组
+      #+BEGIN_SRC python
+        a = np.ones((3,3))
+        b = np.zeros((2,2))
+        c = np.eye(3)
+        d = np.diag(np.array([1,2,3,4]))
+      #+END_SRC
+
+    + =np.random= 随机数组(梅森旋转算法生成)
+      #+BEGIN_SRC python
+        a = np.random.rand(4) # uniform in [0,1]
+        b = np.random.randn(4) # Gaussian
+        np.random.seed(1234) # settiing the random seed
+      #+END_SRC
+
+** 基本数据类型
+
+   1. Numpy 会自动检测输入的数据类型
+   2. 可以显式指定数据类型
+      #+BEGIN_SRC python
+        c = np.array([1,2,3], dtype=float)
+        c.dtype
+      #+END_SRC
+   3. 默认的数据类型是浮点型
+      #+BEGIN_SRC python
+        a = np.ones((3,3))
+        a.dtype
+      #+END_SRC
+
+** 基本的数据可视化
+
+   1. 打开 =IPython=, 或者方便起见，使用 =jupyter notebook=
+   2. 打开交互绘图功能
+      #+BEGIN_SRC python
+        %matplotlib inline
+      #+END_SRC
+      =inline= 可以让我们在 =notebook= 里就能看到图，不会打开新的窗口
+   3. 导入 =Matplotlib= 包
+      #+BEGIN_SRC python
+        import matplotlib.pyplot as plt
+      #+END_SRC
+   4. 然后可以使用，注意，如果没有使用 =%matplotlib inline=, 要显示图片，需要显式地调用 =show= 命令
+      #+BEGIN_SRC python
+        plt.plot(x,y)
+        plt.show()
+      #+END_SRC
+      如果执行了 =%matplotlib inline=, 可以更简单
+      #+BEGIN_SRC python
+        plot(x,y)
+      #+END_SRC
+
+   5. 图像
+      + 一维图像
+
+        #+BEGIN_SRC python
+          x = np.linspace(0, 3, 20)
+          y = np.linspace(0, 9, 20)
+          plt.plot(x, y) #inline plot
+          plt.plot(x, y, 'o') #dot plot
+        #+END_SRC
+
+      + 二维图像
+
+        #+BEGIN_SRC python
+          image = np.random.rand(30, 30)
+          plt.imshow(image, cmap=plt.cm.hot)
+          plt.colorbar()
+        #+END_SRC
