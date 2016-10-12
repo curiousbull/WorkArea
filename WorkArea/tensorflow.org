@@ -1,0 +1,110 @@
+* Tensorflow 的安装与设置
+** 配置要求
+
+   1. Tensorflow 提供 Python2.7 和 Python3.5 的接口
+   2. (Linux Only)GPU在 Cuda Toolkit7.5 和 cuDNN v4 下支持最好，其他版本只有从源码编译过来才能提供支持
+
+** 支持的安装方式概览
+
+   =Pip Install= / =Virtualenv Install= / =Anaconda Install= / =Docker Install=
+
+*** =Pip Install=
+
+    1. Install pip (or pip3 for python3)
+       #+BEGIN_EXAMPLE
+         # If python2
+         $ sudo apt install python-pip python-dev
+         # If python3
+         $ sudo apt install python3-pip python3-dev # If python3
+       #+END_EXAMPLE
+    2. Install Tensorflow
+       #+BEGIN_EXAMPLE
+         # Ubuntu/Linux 64-bit, CPU Only, Python2
+         $ sudo pip install --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.8.0-cp27-none-linux_x86_64.whl
+         # Ubuntu/Linux 64-bit, GPU Enabled, Python2, require CUDA Toolkit 7,5 or cuDNN v4
+         $ sudo pip install --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.8.0-cp27-none-linux_x86_64.whl
+
+         # Python3 Version, CPU Only
+         $ sudo pip3 install --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.8.0-cp34-cp34m-linux_x86_64.whl
+         # Python3 Version, GPU Enabled
+         $ sudo pip3 install --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.8.0-cp34-cp34m-linux_x86_64.whl
+       #+END_EXAMPLE
+
+*** =Anaconda Install=
+
+    1. Install =Anaconda=
+    2. Create a =conda= environment
+       #+BEGIN_EXAMPLE
+         # Python 2.7
+         $ conda create -n tensorflow python=2.7
+
+         # Python 3.5
+         $ conda create -n tensorflow python=3.5
+       #+END_EXAMPLE
+    3. Install =Tensorflow=
+       #+BEGIN_EXAMPLE
+         $ source activate tensorflow
+         (tensorflow)$  # Your prompt should change
+
+         # Ubuntu/Linux 64-bit, CPU only:
+         (tensorflow)$ pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.8.0-cp27-none-linux_x86_64.whl
+
+         # Ubuntu/Linux 64-bit, GPU enabled. Requires CUDA toolkit 7.5 and CuDNN v4.  For
+         # other versions, see "Install from sources" below.
+         (tensorflow)$ pip install --ignore-installed --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow-0.8.0-cp27-none-linux_x86_64.whl
+       #+END_EXAMPLE
+
+*** 注意事项
+
+    在 =Python3= 环境中安装 =Tensorflow= ，可能会出现类似 'not supported platform' 这样的错误，这是由于
+    安装的 =Python3= 版本号是 3.5，而非3.4所致，这时候，可以将上述安装过程中的 =tensorflow-0.8.0-cp34-cp34m-linux_x86_64.whl=
+    下载下来，改名即可，具体操作如下：
+    #+BEGIN_SRC bash
+      wget https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.8.0-cp34-cp34m-linux_x86_64.whl
+      mv tensorflow-0.8.0-cp34-cp34m-linux_x86_64.whl tensorflow-0.8.0-cp35-none-linux_x86_64.whl
+      pip install tensorflow-0.8.0-cp35-none-linux_x86_64.whl
+    #+END_SRC
+
+** 测试是否安装成功
+
+*** 打开 GPU 支持
+
+    1. 如果有安装 GPU 版本的 =Tensorflow= ，需要同时安装 =Cuda Toolkit 7.5= 和 =cuDNN v4=
+    2. 同时还需要设定两个环境变量 =LD_LIBRARY_PATH= 和 =CUDA_HOME=
+       #+BEGIN_SRC bash
+         export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda/lib64"
+         export CUDA_HOME=/usr/local/cuda
+       #+END_SRC
+
+*** 命令行启动 =Tensorflow=
+
+    #+BEGIN_EXAMPLE
+      $ python
+      ...
+      >>> import tensorflow as tf
+      >>> hello = tf.constant('Hello, TensorFlow!')
+      >>> sess = tf.Session()
+      >>> print(sess.run(hello))
+      Hello, TensorFlow!
+      >>> a = tf.constant(10)
+      >>> b = tf.constant(32)
+      >>> print(sess.run(a + b))
+      42
+      >>>
+    #+END_EXAMPLE
+
+*** 启动一个 =Tensorflow= 模型
+
+    所有的 =Tensorflow= 的包，包括 =demo= ，都被安装在 =Python= 库中。 =Python= 库的确切位置根据系统配置有所差异，一般会在如下位置：
+
+    #+BEGIN_EXAMPLE
+      /usr/local/lib/python2.7/dist-packages/tensorflow
+      /usr/local/lib/python2.7/site-packages/tensorflow
+    #+END_EXAMPLE
+
+    附注： 用 =Anaconda= 安装，一般在 '/path/to/anaconda/env/tensorflow' 下
+
+    具体地，想要知道 =Tensorflow= 库的确切位置，可以在具体环境中，执行如下指令：
+    #+BEGIN_SRC bash
+      python -c 'import os; import inspect; import tensorflow; print(os.path.dirname(inspect.getfile(tensorflow)))'
+    #+END_SRC
